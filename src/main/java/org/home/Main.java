@@ -17,12 +17,12 @@ public class Main {
         opt.setCapability("se:name", "Test on grid");
 
         driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"),opt);
-        Thread.sleep(50L);
+        Thread.sleep(50000);
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         driver.manage().window().setPosition(new Point(220,10));
         driver.manage().window().setSize(new Dimension(1000,650));
         driver.get("https://www.google.com");
-        Thread.sleep(50L);
+        Thread.sleep(50000);
         System.out.println(driver.getTitle());
         driver.quit();
     }
