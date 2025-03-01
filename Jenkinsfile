@@ -8,9 +8,11 @@ node {
     stage('Docker Setup') {
         parallel(
           "Start Compose": {
-    	    cmd_exec('docker-compose up -d --scale chrome=2 --scale firefox=0')
+    	    cmd_exec('sudo docker-compose up -d --scale chrome=2 --scale firefox=0')
           },
           "Build Image": {
+            cmd_exec('export MAVEN_HOME=/opt/apache-maven-3.9.9')
+            cmd_exec('export PATH=$PATH:$MAVEN_HOME/bin')
             cmd_exec('mvn install')
           }
         )
