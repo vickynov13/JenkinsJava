@@ -1,18 +1,29 @@
 package org.home;
 
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.TimeUnit;
+
 public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+    private static WebDriver driver;
+    public static void main(String[] args) throws MalformedURLException, InterruptedException {
+        ChromeOptions opt = new ChromeOptions();
+        opt.setCapability("se:name", "Test on grid");
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+        driver = new RemoteWebDriver(new URL("http:localhost:4444/wd/hub"),opt);
+        Thread.sleep(50L);
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        driver.manage().window().setPosition(new Point(220,10));
+        driver.manage().window().setSize(new Dimension(1000,650));
+        driver.get("https://www.google.com");
+        Thread.sleep(50L);
+        System.out.println(driver.getTitle());
+        driver.quit();
     }
 }
