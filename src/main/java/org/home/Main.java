@@ -16,7 +16,7 @@ public class Main {
         ChromeOptions opt = new ChromeOptions();
         opt.setCapability("se:name", "Test on grid");
 
-        driver = new RemoteWebDriver(new URL("http:localhost:4444/wd/hub"),opt);
+        driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"),opt);
         Thread.sleep(50L);
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         driver.manage().window().setPosition(new Point(220,10));
