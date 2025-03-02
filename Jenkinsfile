@@ -8,8 +8,6 @@ node {
     stage('Docker Setup') {
         parallel(
           "Start Compose": {
-            cmd-exec('echo zzzzzzzzzz')
-            cmd-exec('echo ${jenkinsSU}')
     	    cmd_exec('sudo -S <<< ${jenkinsSU} docker-compose up -d --scale chrome=2 --scale firefox=0')
           },
           "Build Image": {
