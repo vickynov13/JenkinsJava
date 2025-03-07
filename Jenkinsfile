@@ -30,7 +30,9 @@ node {
         catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
             script {
                 if (isUnix()) {
-                    sh 'mvn exec:java'
+                    sh '''#!/bin/bash
+                    mvn exec:java
+                    '''
                 } else {
                     bat 'mvn exec:java'
                 }
