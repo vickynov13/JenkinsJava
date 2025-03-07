@@ -19,6 +19,7 @@ node {
                 sh '''#!/bin/bash
                 export MAVEN_HOME=/opt/apache-maven-3.9.9
                 export PATH=$PATH:$MAVEN_HOME/bin
+                mvn -version
                 mvn install
                 '''
             }
@@ -31,6 +32,8 @@ node {
             script {
                 if (isUnix()) {
                     sh '''#!/bin/bash
+                    export MAVEN_HOME=/opt/apache-maven-3.9.9
+                    export PATH=$PATH:$MAVEN_HOME/bin
                     mvn exec:java
                     '''
                 } else {
