@@ -8,48 +8,58 @@ node {
     stage('Docker Setup') {
         parallel(
           "Start Compose": {
-    	    cmd_exec('sudo -S <<< ${jenkinsSU} docker-compose up -d --scale chrome=2 --scale firefox=0')
+            script {
+                sh '''#!/bin/bash
+                sudo -S <<< ${jenkinsSU} docker-compose up -d --scale chrome=2 --scale firefox=0
+                '''
+            }
           },
           "Build Image": {
-            cmd_exec('export MAVEN_HOME=/opt/apache-maven-3.9.9')
-            cmd_exec('export PATH=$PATH:$MAVEN_HOME/bin')
-            cmd_exec('mvn install')
+            script {
+                sh '''#!/bin/bash
+                export MAVEN_HOME=/opt/apache-maven-3.9.9
+                export PATH=$PATH:$MAVEN_HOME/bin
+                mvn install
+                '''
+            }
           }
         )
     }
 
     stage('Execute') {
         catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-
-       if (isUnix()) {
-                mvn exec:java
+            script {
+                if (isUnix()) {
+                    sh 'mvn exec:java'
+                } else {
+                    bat 'mvn exec:java'
+                }
             }
-        else {
-               mvn exec:java
-           }
         }
     }
 
     stage('Docker Teardown') {
         parallel(
           "Stop Compose": {
-            cmd_exec('docker-compose down --rmi local')
+            script {
+                sh 'docker-compose down --rmi local'
+            }
           }
         )
     }
 
-//     stage('Create Report') {
-//         /* Generate Allure Report */
-//         allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
-//     }
-
+    // Uncomment and modify this if you need a report generation stage.
+    /*
+    stage('Create Report') {
+        allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+    }
+    */
 }
 
 def cmd_exec(command) {
     if (isUnix()) {
         return sh(returnStdout: true, script: "${command}").trim()
-    }
-    else {
+    } else {
         return bat(returnStdout: true, script: "${command}").trim()
     }
 }
