@@ -47,7 +47,9 @@ node {
         parallel(
           "Stop Compose": {
             script {
-                sh 'docker-compose down --rmi local'
+                sh '''#!/bin/bash
+                sudo -S <<< ${jenkinsSU} docker-compose down --rmi local
+                '''
             }
           }
         )
