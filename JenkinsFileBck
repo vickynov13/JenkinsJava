@@ -7,6 +7,13 @@ node {
 
     stage('Docker Setup') {
         parallel(
+          "Start Compose": {
+            script {
+                sh '''#!/bin/bash
+                sudo -S <<< ${jenkinsSU} docker-compose up -d --scale chrome=2 --scale firefox=0
+                '''
+            }
+          },
           "Build Image": {
             script {
                 sh '''#!/bin/bash
@@ -34,6 +41,18 @@ node {
                 }
             }
         }
+    }
+
+    stage('Docker Teardown') {
+        parallel(
+          "Stop Compose": {
+            script {
+                sh '''#!/bin/bash
+                sudo -S <<< ${jenkinsSU} docker-compose down --rmi local
+                '''
+            }
+          }
+        )
     }
 
     // Uncomment and modify this if you need a report generation stage.
