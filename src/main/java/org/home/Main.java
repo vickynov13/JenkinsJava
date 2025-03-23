@@ -16,8 +16,8 @@ import org.apache.commons.io.FileUtils;
 public class Main {
     private static WebDriver driver;
     public static void main(String[] args) throws MalformedURLException, InterruptedException {
-//        runWeb();
-        runMobile();
+        runWeb();
+//        runMobile();
     }
 
     private static void runMobile() throws MalformedURLException {
@@ -56,18 +56,30 @@ public class Main {
             throw new RuntimeException("Failed to get Screenshot"+e.getMessage());
         }
     }
+    private static void takeDesktopScreenShot(String name, WebDriver driver) {
+        File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        File dest = new File(System.getProperty("user.dir")+"/screenshots/"+name+".png");
+        try{
+            FileUtils.copyFile(src,dest);
+            System.out.println("Screenshot Saved: "+dest.getAbsolutePath());
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to get Screenshot"+e.getMessage());
+        }
+    }
 
     private static void runWeb() throws InterruptedException, MalformedURLException {
         ChromeOptions opt = new ChromeOptions();
         opt.setCapability("se:name", "Test on grid");
 
-        driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"),opt);
-        Thread.sleep(50000);
+        driver = new RemoteWebDriver(new URL("http://192.168.1.3:4444/wd/hub"),opt);
+//        Thread.sleep(50000);
+        takeDesktopScreenShot("start",driver);
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         driver.manage().window().setPosition(new Point(220,10));
         driver.manage().window().setSize(new Dimension(1000,650));
         driver.get("https://www.google.com");
-        Thread.sleep(50000);
+//        Thread.sleep(50000);
+        takeDesktopScreenShot("openBrowser",driver);
         System.out.println(driver.getTitle());
         driver.quit();
     }
