@@ -16,30 +16,34 @@ import org.apache.commons.io.FileUtils;
 public class Main {
     private static WebDriver driver;
     public static void main(String[] args) throws MalformedURLException, InterruptedException {
-        runWeb();
-//        runMobile();
+//        runWeb();
+        runMobile();
     }
 
     private static void runMobile() throws MalformedURLException {
         AppiumDriver driver;
+//        String appPackage = "com.transsion.calculator";
+//        String deviceUDID = "H626X650C0123456";
+        String deviceUDID = "P8B4C18105000234";
+        String appPackage = "com.android.calculator2";
         DesiredCapabilities caps = new DesiredCapabilities();
         caps.setCapability("platformName","Android");
         caps.setCapability("appium:platformVersion","9");
-        caps.setCapability("appium:deviceName","H626X650C0123456");
+        caps.setCapability("appium:udid",deviceUDID);
         caps.setCapability("appium:automationName","UiAutomator2");
         caps.setCapability("appium:noReset",false);
         caps.setCapability("appium:suppressKillServer",true);
-        caps.setCapability("appium:appPackage","com.transsion.calculator");
-        driver = new AppiumDriver(new URL("http://192.168.1.3:4723/wd/hub"), caps);
-        driver.findElement(By.id("com.transsion.calculator:id/digit_6")).click();
+        caps.setCapability("appium:appPackage",appPackage);
+        driver = new AppiumDriver(new URL("http://192.168.1.3:4444/wd/hub"), caps);
+        driver.findElement(By.id(appPackage+":id/digit_6")).click();
         takeMobileScreenShot("click6",driver);
-        driver.findElement(By.id("com.transsion.calculator:id/op_add")).click();
+        driver.findElement(By.id(appPackage+":id/op_add")).click();
         takeMobileScreenShot("clickadd", driver);
-        driver.findElement(By.id("com.transsion.calculator:id/digit_2")).click();
+        driver.findElement(By.id(appPackage+":id/digit_2")).click();
         takeMobileScreenShot("click2", driver);
-        driver.findElement(By.id("com.transsion.calculator:id/eq")).click();
+        driver.findElement(By.id(appPackage+":id/eq")).click();
         takeMobileScreenShot("clickeq", driver);
-        System.out.println(driver.findElement(By.id("com.transsion.calculator:id/result")).getText());
+        System.out.println(driver.findElement(By.id(appPackage+":id/result")).getText());
         takeMobileScreenShot("result", driver);
         driver.quit();
 
